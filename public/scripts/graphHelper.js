@@ -35,12 +35,12 @@
 
         // Get the profile of the current user.
         me: function me() {
-          return $http.get('https://graph.microsoft.com/v1.0/me');
+          return graphClient.api('/me').get();
         },
 
         // Send an email on behalf of the current user.
         sendMail: function sendMail(email) {
-          return $http.post('https://graph.microsoft.com/v1.0/me/sendMail', { 'message' : email, 'saveToSentItems': true });        
+          return graphClient.api('/me/sendMail').post({ 'message' : email, 'saveToSentItems': true });
         }
       }
     }]);

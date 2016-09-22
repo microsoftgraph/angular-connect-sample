@@ -8,3 +8,14 @@
 		'angular-loading-bar'
   ])		
 })();
+
+var authToken;
+var graphClient = MicrosoftGraph.init({
+    authProvider: function(done) {
+        if (typeof authToken === "undefined") {
+          done({err: "No auth token"})
+        } else {
+          done(null, authToken); //first parameter takes an error if you can't get an access token
+        }
+    }
+});

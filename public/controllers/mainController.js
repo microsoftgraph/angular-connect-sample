@@ -51,8 +51,8 @@
         expiration.setTime((auth.expires - 300) * 1000); 
         if (expiration > new Date()) {
 
-          // Add the required Authorization header with bearer token.
-          $http.defaults.headers.common.Authorization = 'Bearer ' + auth.access_token;
+          // let the authProvider access the access token
+          authToken = auth.access_token;
           
           // This header has been added to identify our sample in the Microsoft Graph service. If extracting this code for your project please remove.
           $http.defaults.headers.common.SampleID = 'angular-connect-rest-sample';
@@ -60,10 +60,9 @@
           if (localStorage.getItem('user') === null) {
 
             // Get the profile of the current user.
-            GraphHelper.me().then(function(response) {
+            GraphHelper.me().then(function(user) {
               
               // Save the user to localStorage.
-              let user =response.data;
               localStorage.setItem('user', angular.toJson(user));
 
               vm.displayName = user.displayName;
@@ -123,7 +122,7 @@
         GraphHelper.sendMail(email)
           .then(function (response) {
             $log.debug('HTTP request to the Microsoft Graph API returned successfully.', response);
-            response.status === 202 ? vm.requestSuccess = true : vm.requestSuccess = false;
+            vm.requestSuccess = true;
             vm.requestFinished = true;
           }, function (error) {
             $log.error('HTTP request to the Microsoft Graph API failed.');
