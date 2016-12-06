@@ -10,7 +10,7 @@
 })();
 
 var authToken;
-var graphClient = MicrosoftGraph.init({
+var graphClient = MicrosoftGraph.Client.init({
     authProvider: function(done) {
         if (typeof authToken === "undefined") {
           done({err: "No auth token"})
