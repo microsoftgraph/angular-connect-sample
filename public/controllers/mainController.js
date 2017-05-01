@@ -42,7 +42,7 @@
         }
     }
 
-    // Auth info is saved in localStorage by now, so set the default headers and user properties.
+    // Set the default headers and user properties.
     function processAuth() {
         let auth = angular.fromJson(localStorage.auth); 
 
