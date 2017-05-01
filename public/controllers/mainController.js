@@ -36,16 +36,16 @@
 
     function initAuth() {
 
-      // Check initial connection status.
-      if (localStorage.auth) {
-          processAuth();
-      } else {
-        let auth = hello('aad').getAuthResponse();
-        if (auth !== null) {
-          localStorage.auth = angular.toJson(auth);
-          processAuth();
+        // Check initial connection status.
+        if (localStorage.token) {
+            processAuth();
+        } else {
+            let auth = null; // hello('aad').getAuthResponse();
+            if (auth !== null) {
+                localStorage.auth = angular.toJson(auth);
+                processAuth();
+            }
         }
-      }
     }
 
     // Auth info is saved in localStorage by now, so set the default headers and user properties.
@@ -53,12 +53,12 @@
         let auth = angular.fromJson(localStorage.auth); 
 
         // Check token expiry. If the token is valid for another 5 minutes, we'll use it.       
-        let expiration = new Date();
-        expiration.setTime((auth.expires - 300) * 1000); 
-        if (expiration > new Date()) {
+        //let expiration = new Date();
+        //expiration.setTime((auth.expires - 300) * 1000); 
+        //if (expiration > new Date()) {
 
           // let the authProvider access the access token
-          authToken = auth.access_token;
+          authToken = localStorage.token;
           
           // This header has been added to identify our sample in the Microsoft Graph service. If extracting this code for your project please remove.
           $http.defaults.headers.common.SampleID = 'angular-connect-rest-sample';
@@ -80,7 +80,7 @@
             vm.displayName = user.displayName;
             vm.emailAddress = user.mail || user.userPrincipalName;
           }
-       }
+       //}
     }
 
     vm.initAuth();    
@@ -101,10 +101,11 @@
     function sendMail() {
 
       // Check token expiry. If the token is valid for another 5 minutes, we'll use it.
-      let auth = angular.fromJson(localStorage.auth);       
-      let expiration = new Date();
-      expiration.setTime((auth.expires - 300) * 1000); 
-      if (expiration > new Date()) {
+      let auth = angular.fromJson(localStorage.auth);
+      authToken = localStorage.token;       
+      //let expiration = new Date();
+      //expiration.setTime((auth.expires - 300) * 1000); 
+      //if (expiration > new Date()) {
         
         // Build the HTTP request payload (the Message object).
         var email = {
@@ -135,16 +136,16 @@
             vm.requestSuccess = false;
             vm.requestFinished = true;
           });
-       } else {
+       //} else {
 
          // If the token is expired, this sample just redirects the user to sign in.
-         GraphHelper.login();
-       }
+         //GraphHelper.login();
+       //}
     };
 
     // Get the HTMl for the email to send.
     function getEmailContent() {
-      return "<html><head> <meta http-equiv=\'Content-Type\' content=\'text/html; charset=us-ascii\'> <title></title> </head><body style=\'font-family:calibri\'> <p>Congratulations " + vm.displayName + ",</p> <p>This is a message from the Microsoft Graph Connect sample. You are well on your way to incorporating Microsoft Graph endpoints in your apps. </p> <h3>What&#8217;s next?</h3><ul><li>Check out <a href='https://graph.microsoft.io' target='_blank'>graph.microsoft.io</a> to start building Microsoft Graph apps today with all the latest tools, templates, and guidance to get started quickly.</li><li>Use the <a href='https://graph.microsoft.io/graph-explorer' target='_blank'>Graph explorer</a> to explore the rest of the APIs and start your testing.</li><li>Browse other <a href='https://github.com/microsoftgraph/' target='_blank'>samples on GitHub</a> to see more of the APIs in action.</li></ul> <h3>Give us feedback</h3> <ul><li>If you have any trouble running this sample, please <a href='https://github.com/microsoftgraph/angular-connect-rest-sample/issues' target='_blank'>log an issue</a>.</li><li>For general questions about the Microsoft Graph API, post to <a href='https://stackoverflow.com/questions/tagged/microsoftgraph?sort=newest' target='blank'>Stack Overflow</a>. Make sure that your questions or comments are tagged with [microsoftgraph].</li></ul><p>Thanks and happy coding!<br>Your Microsoft Graph samples development team</p> <div style=\'text-align:center; font-family:calibri\'> <table style=\'width:100%; font-family:calibri\'> <tbody> <tr> <td><a href=\'https://github.com/microsoftgraph/angular-connect-rest-sample\'>See on GitHub</a> </td> <td><a href=\'https://officespdev.uservoice.com/\'>Suggest on UserVoice</a> </td> <td><a href=\'https://twitter.com/share?text=I%20just%20started%20developing%20%23Angular%20apps%20using%20the%20%23MicrosoftGraph%20Connect%20sample!%20&url=https://github.com/microsoftgraph/angular-connect-rest-sample\'>Share on Twitter</a> </td> </tr> </tbody> </table> </div>  </body> </html>";
+      return "<html><head> <meta http-equiv=\'Content-Type\' content=\'text/html; charset=us-ascii\'> <title></title> </head><body style=\'font-family:calibri\'> <p>Congratulations " + vm.displayName + ",</p> <p>This is a message from the Microsoft Graph Connect sample. You are well on your way to incorporating Microsoft Graph endpoints in your apps. </p> <h3>What&#8217;s next?</h3><ul><li>Check out <a href='https://developer.microsoft.com/graph/' target='_blank'>https://developer.microsoft.com/graph</a> to start building Microsoft Graph apps today with all the latest tools, templates, and guidance to get started quickly.</li><li>Use the <a href='https://developer.microsoft.com/graph/graph-explorer' target='_blank'>Graph explorer</a> to explore the rest of the APIs and start your testing.</li><li>Browse other <a href='https://github.com/microsoftgraph/' target='_blank'>samples on GitHub</a> to see more of the APIs in action.</li></ul> <h3>Give us feedback</h3> <ul><li>If you have any trouble running this sample, please <a href='https://github.com/microsoftgraph/angular-connect-rest-sample/issues' target='_blank'>log an issue</a>.</li><li>For general questions about the Microsoft Graph API, post to <a href='https://stackoverflow.com/questions/tagged/microsoftgraph?sort=newest' target='blank'>Stack Overflow</a>. Make sure that your questions or comments are tagged with [microsoftgraph].</li></ul><p>Thanks and happy coding!<br>Your Microsoft Graph samples development team</p> <div style=\'text-align:center; font-family:calibri\'> <table style=\'width:100%; font-family:calibri\'> <tbody> <tr> <td><a href=\'https://github.com/microsoftgraph/angular-connect-rest-sample\'>See on GitHub</a> </td> <td><a href=\'https://officespdev.uservoice.com/\'>Suggest on UserVoice</a> </td> <td><a href=\'https://twitter.com/share?text=I%20just%20started%20developing%20%23Angular%20apps%20using%20the%20%23MicrosoftGraph%20Connect%20sample!%20&url=https://github.com/microsoftgraph/angular-connect-rest-sample\'>Share on Twitter</a> </td> </tr> </tbody> </table> </div>  </body> </html>";
     };
   };
 })();

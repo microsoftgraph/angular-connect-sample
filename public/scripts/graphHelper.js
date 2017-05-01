@@ -18,26 +18,31 @@
     .service('GraphHelper', ['$http', function ($http) {
 
       // Initialize the auth request.
-      hello.init( {
-        aad: clientId // from public/scripts/config.js
-        }, {
-        redirect_uri: redirectUrl,
-        scope: graphScopes
+      clientApplication = createApplication(APPLICATION_CONFIG, function ()
+      {
+          // localStorage.user = clientApplication.user;
+          getAccessToken(APPLICATION_CONFIG.graphScopes, function (token, error)
+          {
+              if (token) {
+                  localStorage.token = angular.toJson(token);
+
+                  // refreshes the page as with msal, the authentication happened in an HTML dialog, 
+                  // whereas it happened in the window itself with hello.js
+                  location = location;
+              }
+          });
       });
 
       return {
 
         // Sign in and sign out the user.
         login: function login() {
-          hello('aad').login({
-            display: 'page',
-            state: 'abcd'
-          });
+            clientApplication.login();
         },
         logout: function logout() {
-          hello('aad').logout();
-          delete localStorage.auth;
-          delete localStorage.user;
+            clientApplication.logout();
+            delete localStorage.token;
+            delete localStorage.user;
         },
 
         // Get the profile of the current user.
