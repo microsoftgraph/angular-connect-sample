@@ -3,12 +3,6 @@
 *  See LICENSE in the source repository root for complete license information. 
 */
 
-// This sample uses an open source OAuth 2.0 library that is compatible with the Azure AD v2.0 endpoint.
-// Microsoft does not provide fixes or direct support for this library.
-// Refer to the library’s repository to file issues or for other support.
-// For more information about auth libraries see: https://azure.microsoft.com/documentation/articles/active-directory-v2-libraries/
-// Library repo: http://adodson.com/hello.js/
-
 (function () {
   angular
     .module('app')
@@ -52,35 +46,30 @@
     function processAuth() {
         let auth = angular.fromJson(localStorage.auth); 
 
-        // Check token expiry. If the token is valid for another 5 minutes, we'll use it.       
-        //let expiration = new Date();
-        //expiration.setTime((auth.expires - 300) * 1000); 
-        //if (expiration > new Date()) {
+        // let the authProvider access the access token
+        authToken = localStorage.token;
+        
+        // This header has been added to identify our sample in the Microsoft Graph service. If extracting this code for your project please remove.
+        $http.defaults.headers.common.SampleID = 'angular-connect-rest-sample';
 
-          // let the authProvider access the access token
-          authToken = localStorage.token;
-          
-          // This header has been added to identify our sample in the Microsoft Graph service. If extracting this code for your project please remove.
-          $http.defaults.headers.common.SampleID = 'angular-connect-rest-sample';
+        if (localStorage.getItem('user') === null) {
 
-          if (localStorage.getItem('user') === null) {
+          // Get the profile of the current user.
+          GraphHelper.me().then(function(user) {
+            
+            // Save the user to localStorage.
+            localStorage.setItem('user', angular.toJson(user));
 
-            // Get the profile of the current user.
-            GraphHelper.me().then(function(user) {
-              
-              // Save the user to localStorage.
-              localStorage.setItem('user', angular.toJson(user));
-
-              vm.displayName = user.displayName;
-              vm.emailAddress = user.mail || user.userPrincipalName;
-            });
-          } else {
-            let user = angular.fromJson(localStorage.user);
-              
             vm.displayName = user.displayName;
             vm.emailAddress = user.mail || user.userPrincipalName;
-          }
-       //}
+          });
+        } else {
+          let user = angular.fromJson(localStorage.user);
+            
+          vm.displayName = user.displayName;
+          vm.emailAddress = user.mail || user.userPrincipalName;
+        }
+
     }
 
     vm.initAuth();    
@@ -103,44 +92,37 @@
       // Check token expiry. If the token is valid for another 5 minutes, we'll use it.
       let auth = angular.fromJson(localStorage.auth);
       authToken = localStorage.token;       
-      //let expiration = new Date();
-      //expiration.setTime((auth.expires - 300) * 1000); 
-      //if (expiration > new Date()) {
         
-        // Build the HTTP request payload (the Message object).
-        var email = {
-            Subject: 'Welcome to Microsoft Graph development with Angular and the Microsoft Graph Connect sample',
-            Body: {
-              ContentType: 'HTML',
-              Content: getEmailContent()
-            },
-            ToRecipients: [
-              {
-                EmailAddress: {
-                  Address: vm.emailAddress
-                }
+      // Build the HTTP request payload (the Message object).
+      var email = {
+          Subject: 'Welcome to Microsoft Graph development with Angular and the Microsoft Graph Connect sample',
+          Body: {
+            ContentType: 'HTML',
+            Content: getEmailContent()
+          },
+          ToRecipients: [
+            {
+              EmailAddress: {
+                Address: vm.emailAddress
               }
-            ]
-        };
+            }
+          ]
+      };
 
-        // Save email address so it doesn't get lost with two way data binding.
-        vm.emailAddressSent = vm.emailAddress;
-        
-        GraphHelper.sendMail(email)
-          .then(function (response) {
-            $log.debug('HTTP request to the Microsoft Graph API returned successfully.', response);
-            vm.requestSuccess = true;
-            vm.requestFinished = true;
-          }, function (error) {
-            $log.error('HTTP request to the Microsoft Graph API failed.');
-            vm.requestSuccess = false;
-            vm.requestFinished = true;
-          });
-       //} else {
+      // Save email address so it doesn't get lost with two way data binding.
+      vm.emailAddressSent = vm.emailAddress;
+      
+      GraphHelper.sendMail(email)
+        .then(function (response) {
+          $log.debug('HTTP request to the Microsoft Graph API returned successfully.', response);
+          vm.requestSuccess = true;
+          vm.requestFinished = true;
+        }, function (error) {
+          $log.error('HTTP request to the Microsoft Graph API failed.');
+          vm.requestSuccess = false;
+          vm.requestFinished = true;
+        });
 
-         // If the token is expired, this sample just redirects the user to sign in.
-         //GraphHelper.login();
-       //}
     };
 
     // Get the HTMl for the email to send.
