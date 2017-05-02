@@ -34,7 +34,7 @@
         if (localStorage.token) {
             processAuth();
         } else {
-            let auth = null; // hello('aad').getAuthResponse();
+            let auth = null;
             if (auth !== null) {
                 localStorage.auth = angular.toJson(auth);
                 processAuth();
@@ -44,13 +44,9 @@
 
     // Set the default headers and user properties.
     function processAuth() {
-        let auth = angular.fromJson(localStorage.auth); 
 
         // let the authProvider access the access token
         authToken = localStorage.token;
-        
-        // This header has been added to identify our sample in the Microsoft Graph service. If extracting this code for your project please remove.
-        $http.defaults.headers.common.SampleID = 'angular-connect-rest-sample';
 
         if (localStorage.getItem('user') === null) {
 
