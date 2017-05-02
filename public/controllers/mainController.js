@@ -85,8 +85,6 @@
     // Send an email on behalf of the current user.
     function sendMail() {
 
-      // Check token expiry. If the token is valid for another 5 minutes, we'll use it.
-      let auth = angular.fromJson(localStorage.auth);
       authToken = localStorage.token;       
         
       // Build the HTTP request payload (the Message object).
