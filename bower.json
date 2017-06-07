@@ -15,7 +15,6 @@
     "tests"
   ],
   "dependencies": {
-    "hello": "^1.14.0",
     "graph-sdk": "https://github.com/microsoftgraph/msgraph-sdk-javascript.git"
   }
 }
