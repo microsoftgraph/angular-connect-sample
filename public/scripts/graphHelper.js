@@ -21,6 +21,7 @@
             clientApplication.loginPopup(APPLICATION_CONFIG.graphScopes).then(function (idToken) {
                 clientApplication.acquireTokenSilent(APPLICATION_CONFIG.graphScopes).then(function (accessToken) {
                     localStorage.token = accessToken;
+                    window.location.reload();
                 }, function (error) {
                     clientApplication.acquireTokenPopup(APPLICATION_CONFIG.graphScopes).then(function (accessToken) {
                         localStorage.token = accessToken;
