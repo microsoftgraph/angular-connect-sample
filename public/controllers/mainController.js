@@ -8,7 +8,7 @@
     .module('app')
     .controller('MainController', MainController);
 
-  function MainController($http, $log, GraphHelper) {
+  function MainController($scope, $http, $log, GraphHelper) {
     let vm = this;
 
     // View model properties
@@ -98,16 +98,17 @@
 
       // Save email address so it doesn't get lost with two way data binding.
       vm.emailAddressSent = vm.emailAddress;
-      
       GraphHelper.sendMail(email)
         .then(function (response) {
           $log.debug('HTTP request to the Microsoft Graph API returned successfully.', response);
           vm.requestSuccess = true;
           vm.requestFinished = true;
+          $scope.$apply();
         }, function (error) {
           $log.error('HTTP request to the Microsoft Graph API failed.');
           vm.requestSuccess = false;
           vm.requestFinished = true;
+          $scope.$apply();
         });
 
     };
