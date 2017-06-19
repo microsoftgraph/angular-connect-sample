@@ -6,6 +6,17 @@
 
 "use strict";
 
+function createApplication(applicationConfig) {
+
+    var clientApplication = new Msal.UserAgentApplication(applicationConfig.clientID, null, function (errorDesc, token, error, tokenType) {
+        // Called after loginRedirect or acquireTokenPopup
+    });
+
+    return clientApplication;
+}
+
+var clientApplication;
+
 (function () {
   angular
     .module('app')
