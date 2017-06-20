@@ -4,13 +4,18 @@
 */
 
 
-// This sample uses an open source OAuth 2.0 library that is compatible with the Azure AD v2.0 endpoint. 
-// Microsoft does not provide fixes or direct support for this library. 
-// Refer to the library’s repository to file issues or for other support. 
-// For more information about auth libraries see: https://azure.microsoft.com/documentation/articles/active-directory-v2-libraries/ 
-// Library repo: http://adodson.com/hello.js/
-
 "use strict";
+
+function createApplication(applicationConfig) {
+
+    var clientApplication = new Msal.UserAgentApplication(applicationConfig.clientID, null, function (errorDesc, token, error, tokenType) {
+        // Called after loginRedirect or acquireTokenPopup
+    });
+
+    return clientApplication;
+}
+
+var clientApplication;
 
 (function () {
   angular
@@ -18,26 +23,31 @@
     .service('GraphHelper', ['$http', function ($http) {
 
       // Initialize the auth request.
-      hello.init( {
-        aad: clientId // from public/scripts/config.js
-        }, {
-        redirect_uri: redirectUrl,
-        scope: graphScopes
-      });
+      clientApplication = createApplication(APPLICATION_CONFIG);
 
       return {
 
         // Sign in and sign out the user.
         login: function login() {
-          hello('aad').login({
-            display: 'page',
-            state: 'abcd'
-          });
+            clientApplication.loginPopup(APPLICATION_CONFIG.graphScopes).then(function (idToken) {
+                clientApplication.acquireTokenSilent(APPLICATION_CONFIG.graphScopes).then(function (accessToken) {
+                    localStorage.token = accessToken;
+                    window.location.reload();
+                }, function (error) {
+                    clientApplication.acquireTokenPopup(APPLICATION_CONFIG.graphScopes).then(function (accessToken) {
+                        localStorage.token = accessToken;
+                    }, function (error) {
+                        window.alert("Error acquiring the popup:\n" + error);
+                    });
+                })
+            }, function (error) {
+                window.alert("Error during login:\n" + error);
+            });
         },
         logout: function logout() {
-          hello('aad').logout();
-          delete localStorage.auth;
-          delete localStorage.user;
+            clientApplication.logout();
+            delete localStorage.token;
+            delete localStorage.user;
         },
 
         // Get the profile of the current user.
