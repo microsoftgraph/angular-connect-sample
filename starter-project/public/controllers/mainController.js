@@ -8,7 +8,7 @@
     .module('app')
     .controller('MainController', MainController);
 
-  function MainController($http, $log, GraphHelper) {
+  function MainController($scope, $http, $log, GraphHelper) {
     let vm = this;
 
     // View model properties
