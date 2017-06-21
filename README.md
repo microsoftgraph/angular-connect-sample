@@ -1,4 +1,4 @@
- an# Microsoft Graph JavaScript SDK Connect Sample for AngularJS
+ # Microsoft Graph JavaScript SDK Connect Sample for AngularJS
 
 ## Table of contents
 
