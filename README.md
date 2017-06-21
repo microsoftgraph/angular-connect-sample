@@ -1,4 +1,4 @@
-# Microsoft Graph JavaScript SDK Connect Sample for AngularJS
+ an# Microsoft Graph JavaScript SDK Connect Sample for AngularJS
 
 ## Table of contents
 
@@ -55,7 +55,7 @@ To use the Microsoft Graph Connect sample for AngularJS, you need the following:
 
 3. Replace the **clientID** placeholder value with the application ID of your registered Azure application.
 
-4. In a command prompt, run the following command in the root directory. This installs the Microsoft Graph JavaScript SDK.
+4. In a command prompt, run the following command in the root directory. This installs the Microsoft Graph JavaScript SDK and other dependencies.
 
   ```
 npm install
