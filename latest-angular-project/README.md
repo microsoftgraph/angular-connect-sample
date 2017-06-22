@@ -1,7 +1,7 @@
 # LatestAngularProject
 
 
-Update first the app.oauth.ts file with your own Application Id - (Microsoft Apps)[http://go.microsoft.com/fwlink/?LinkID=144070]
+Update first the app.oauth.ts file with your own Application Id - [Microsoft Apps](http://go.microsoft.com/fwlink/?LinkID=144070)
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.0.0.
 
 ## Development server
