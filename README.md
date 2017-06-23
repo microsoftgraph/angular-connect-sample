@@ -42,7 +42,7 @@ To use the Microsoft Graph Connect sample for AngularJS, you need the following:
 
 6. Choose **Web**.
 
-7. Make sure the **Allow Implicit Flow** check box is selected, and enter *http://localhost:8080/login* as the Redirect URI. 
+7. Make sure the **Allow Implicit Flow** check box is selected, and enter *http://localhost:8080/* as the Redirect URI. 
 
 8. Choose **Save**.
 
