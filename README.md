@@ -70,7 +70,7 @@ bower install
 
 7. Choose the **Connect** button.
 
-8. Sign in with your personal or work or school account and grant the requested permissions.
+8. Sign in with your personal or work or school account and grant the requested permissions. If a textbox with your signed-in email address does not replace the `Connect` button, please allow pop-ups for the url `http://localhost:8080` in the browser.
 
 9. Optionally edit the recipient's email address, and then choose the **Send mail** button. When the mail is sent, a Success message is displayed below the button.
 
